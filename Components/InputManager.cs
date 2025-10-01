@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ShirtsPad.Components;
@@ -16,13 +17,15 @@ public enum InputType
 
 public class InputManager : MonoBehaviour
 {
+    public static InputManager Instance { get; private set; }
+
     public struct ControllerButton
     {
-        public bool IsPressed;
-        public bool WasPressed;
+        public bool isPressed;
+        public bool wasPressed;
 
-        public bool IsReleased;
-        public bool WasReleased;
+        public bool isReleased;
+        public bool wasReleased;
     }
 
     public ControllerButton RightPrimary, RightSecondary, RightTrigger, RightGrip;
@@ -53,32 +56,35 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void HandleInput(ref ControllerButton button, bool isPressed)
+    private void HandleInput(ref ControllerButton button, Func<bool> getInput)
     {
-        bool wasPressed = button.IsPressed;
-        button.IsPressed = isPressed;
-        button.IsReleased = !isPressed;
+        bool isPressed = getInput();
+        bool wasPressed = button.isPressed;
+        button.isPressed = isPressed;
+        button.isReleased = !isPressed;
 
         if (wasPressed && !isPressed)
-            button.WasReleased = true;
+            button.wasReleased = true;
         else
-            button.WasReleased = false;
+            button.wasReleased = false;
 
         if (!wasPressed && isPressed)
-            button.WasPressed = true;
+            button.wasPressed = true;
         else
-            button.WasPressed = false;
+            button.wasPressed = false;
     }
 
     private void Update()
     {
-        HandleInput(ref RightPrimary, ControllerInputPoller.instance.rightControllerPrimaryButton);
-        HandleInput(ref RightSecondary, ControllerInputPoller.instance.rightControllerSecondaryButton);
-        HandleInput(ref RightTrigger, ControllerInputPoller.instance.rightControllerTriggerButton);
-        HandleInput(ref RightGrip, ControllerInputPoller.instance.rightGrab);
-        HandleInput(ref LeftPrimary, ControllerInputPoller.instance.leftControllerPrimaryButton);
-        HandleInput(ref LeftSecondary, ControllerInputPoller.instance.leftControllerSecondaryButton);
-        HandleInput(ref LeftTrigger, ControllerInputPoller.instance.leftControllerTriggerButton);
-        HandleInput(ref LeftGrip, ControllerInputPoller.instance.leftGrab);
+        HandleInput(ref RightPrimary, () => ControllerInputPoller.instance.rightControllerPrimaryButton);
+        HandleInput(ref RightSecondary, () => ControllerInputPoller.instance.rightControllerSecondaryButton);
+        HandleInput(ref RightTrigger, () => ControllerInputPoller.instance.rightControllerTriggerButton);
+        HandleInput(ref RightGrip, () => ControllerInputPoller.instance.rightGrab);
+        HandleInput(ref LeftPrimary, () => ControllerInputPoller.instance.leftControllerPrimaryButton);
+        HandleInput(ref LeftSecondary, () => ControllerInputPoller.instance.leftControllerSecondaryButton);
+        HandleInput(ref LeftTrigger, () => ControllerInputPoller.instance.leftControllerTriggerButton);
+        HandleInput(ref LeftGrip, () => ControllerInputPoller.instance.leftGrab);
     }
+
+    private void Awake() => Instance = this;
 }
