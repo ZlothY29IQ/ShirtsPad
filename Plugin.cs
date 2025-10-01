@@ -29,7 +29,7 @@ namespace ShirtsPad
         private TextMeshProUGUI equipTextUI;
 
         private InputManager _inputManager;
-        
+
         private GameObject shirtStand;
 
         public Camera _shirtCamera;
@@ -49,10 +49,11 @@ namespace ShirtsPad
         {
             if (ShirtPad == null)
             {
-                ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad").LoadAsset<GameObject>("ShirtsPad"));
+                ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad")
+                    .LoadAsset<GameObject>("ShirtsPad"));
                 ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
                 ShirtPad.transform.localScale = new Vector3(5f, 0.7f, 7f);
-                ShirtPad.transform.localRotation  = Quaternion.Euler(325f, 10f, 85f);
+                ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
             }
 
@@ -115,27 +116,32 @@ namespace ShirtsPad
             {
                 if (_shirtCamera != null && target != null)
                 {
-                    Vector3 desiredPos = target.position + new Vector3(0.15f, 0f, 0.25f);
-                    _shirtCamera.transform.position = Vector3.Lerp(_shirtCamera.transform.position, desiredPos, Time.deltaTime * 5f);
-                    Vector3 lookAt = new Vector3(target.position.x, _shirtCamera.transform.position.y, target.position.z);
+                    Vector3 desiredPos = target.position + new Vector3(0.15f, 0f, target.forward.z * 0.5f);
+                    _shirtCamera.transform.position =
+                        Vector3.Lerp(_shirtCamera.transform.position, desiredPos, Time.deltaTime * 5f);
+                    Vector3 lookAt = new Vector3(target.position.x, _shirtCamera.transform.position.y,
+                        target.position.z);
                     _shirtCamera.transform.LookAt(lookAt);
                 }
 
                 if (shirtNameUI == null)
                 {
-                    GameObject nameObj = GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Text/Item/Main");
+                    GameObject nameObj =
+                        GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Text/Item/Main");
                     if (nameObj != null) shirtNameUI = nameObj.GetComponent<TextMeshProUGUI>();
                 }
 
                 if (shirtCreatorUI == null)
                 {
-                    GameObject bodyObj = GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Text/Item/Body");
+                    GameObject bodyObj =
+                        GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Text/Item/Body");
                     if (bodyObj != null) shirtCreatorUI = bodyObj.GetComponent<TextMeshProUGUI>();
                 }
-                
+
                 if (equipTextUI == null)
                 {
-                    GameObject equipObj = GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Buttons/ShirtEquip/Equip");
+                    GameObject equipObj =
+                        GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Buttons/ShirtEquip/Equip");
                     if (equipObj != null) equipTextUI = equipObj.GetComponent<TextMeshProUGUI>();
                 }
 
