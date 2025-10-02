@@ -104,7 +104,7 @@ namespace ShirtsPad
             {
                 if (_shirtCamera != null && target != null)
                 {
-                    Vector3 localOffset = new Vector3(0f, -0.05f, 0.8f);
+                    Vector3 localOffset = new Vector3(0f, 0f, 0.8f);
 
                     Vector3 desiredPos = target.TransformPoint(localOffset);
 
