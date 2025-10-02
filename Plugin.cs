@@ -28,11 +28,7 @@ namespace ShirtsPad
         private TextMeshProUGUI shirtNameUI;
         private TextMeshProUGUI shirtCreatorUI;
         private TextMeshProUGUI equipTextUI;
-
-        private InputManager _inputManager;
-
-        private GameObject shirtStand;
-
+        
         public Camera _shirtCamera;
         public Transform target;
 
