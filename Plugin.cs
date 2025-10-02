@@ -23,6 +23,7 @@ namespace ShirtsPad
         public TextMeshPro shirtName;
         public TextMeshPro shirtCreator;
         public TextMeshPro equipText;
+        public TextMeshPro versionText;
 
         private TextMeshProUGUI shirtNameUI;
         private TextMeshProUGUI shirtCreatorUI;
@@ -53,7 +54,8 @@ namespace ShirtsPad
                 ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad")
                     .LoadAsset<GameObject>("ShirtsPad"));
                 ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
-                ShirtPad.transform.localScale = new Vector3(5f, 0.7f, 7f);
+                ShirtPad.transform.localScale = new Vector3(4.8f, 0.7f, 7f);
+                //ShirtPad.transform.localScale = new Vector3(4.61f, 0.7f, 6.88f);
                 ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
                 ShirtPad.SetActive(false);
@@ -73,6 +75,8 @@ namespace ShirtsPad
             shirtName = ShirtPad.transform.Find("ShirtName").GetComponent<TextMeshPro>();
             shirtCreator = ShirtPad.transform.Find("ShirtCreator").GetComponent<TextMeshPro>();
             equipText = ShirtPad.transform.Find("Equip/Text").GetComponent<TextMeshPro>();
+            versionText = ShirtPad.transform.Find("Credits/Version").GetComponent<TextMeshPro>();
+            versionText.text = $"Version: {Constants.Version}";
             
 
             back.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Back Button Pressed"); };
