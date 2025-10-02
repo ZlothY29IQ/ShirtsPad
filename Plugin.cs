@@ -97,7 +97,7 @@ namespace ShirtsPad
                     CreateShirtCam(shirtCharacterObj.transform);
             }
 
-            if (InputManager.Instance.LeftPrimary.Down)
+            if (InputManager.Instance.LeftPrimary.WasDown)
                 ShirtPad.SetActive(!ShirtPad.activeSelf);
 
             if (ShirtPad.activeSelf)

@@ -21,9 +21,9 @@ namespace ShirtsPad.Components
 
         public class ControllerButton
         {
-            public bool Down;
+            public bool WasDown;
             public bool Held;
-            public bool Up;
+            public bool WasUp;
 
             private bool lastState;
 
@@ -31,8 +31,8 @@ namespace ShirtsPad.Components
             {
                 bool current = getInput();
 
-                Down = !lastState && current;
-                Up = lastState && !current;
+                WasDown = !lastState && current;
+                WasUp = lastState && !current;
                 Held = current;
 
                 lastState = current;
