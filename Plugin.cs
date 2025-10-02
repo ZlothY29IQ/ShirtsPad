@@ -35,6 +35,7 @@ namespace ShirtsPad
         public Camera _shirtCamera;
         public Transform target;
 
+
         public static Plugin Instance { get; private set; }
 
         private void Awake()
@@ -55,6 +56,7 @@ namespace ShirtsPad
                 ShirtPad.transform.localScale = new Vector3(5f, 0.7f, 7f);
                 ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
+                ShirtPad.SetActive(false);
             }
 
             back = ShirtPad.transform.Find("Back").gameObject;
@@ -71,30 +73,16 @@ namespace ShirtsPad
             shirtName = ShirtPad.transform.Find("ShirtName").GetComponent<TextMeshPro>();
             shirtCreator = ShirtPad.transform.Find("ShirtCreator").GetComponent<TextMeshPro>();
             equipText = ShirtPad.transform.Find("Equip/Text").GetComponent<TextMeshPro>();
-
-            GameObject debugPointer = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            debugPointer.name = "DebugPointer";
-            debugPointer.transform.SetParent(GTPlayer.Instance.rightControllerTransform, false);
-            debugPointer.transform.localPosition = new Vector3(0f, -0.01f, 0.13f);
-            debugPointer.transform.localRotation = Quaternion.identity;
-            debugPointer.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-
-            SphereCollider pointerCollider = debugPointer.GetComponent<SphereCollider>();
-            pointerCollider.isTrigger = true;
-            debugPointer.AddComponent<ButtonPresser>();
-
-            if (debugPointer.TryGetComponent(out MeshRenderer renderer))
-            {
-                renderer.material = new Material(Shader.Find("GorillaTag/UberShader"));
-                renderer.material.color = Color.blue;
-            }
+            
 
             back.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Back Button Pressed"); };
             previous.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Previous Button Pressed"); };
             next.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Next Button Pressed"); };
             equip.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Equip Button Pressed"); };
 
-            ShirtPad.AddComponent<InputManager>();
+            
+            GameObject componentHolder = new GameObject("ComponentHolder");
+            componentHolder.AddComponent<InputManager>();
         }
 
         private void Update()
@@ -104,26 +92,28 @@ namespace ShirtsPad
 
             if (_shirtCamera == null)
             {
-                GameObject shirtStandObj = GameObject.Find("GorillaShirts/Shirt Stand/Character");
-                if (shirtStandObj != null)
-                    CreateShirtCam(shirtStandObj.transform);
+                GameObject shirtCharacterObj = GameObject.Find("GorillaShirts/Shirt Stand/Character");
+                if (shirtCharacterObj != null)
+                    CreateShirtCam(shirtCharacterObj.transform);
             }
 
-            if (InputManager.Instance.LeftPrimary.wasPressed)
+            if (InputManager.Instance.LeftPrimary.Down)
                 ShirtPad.SetActive(!ShirtPad.activeSelf);
 
             if (ShirtPad.activeSelf)
             {
                 if (_shirtCamera != null && target != null)
                 {
-                    Vector3 desiredPos = target.position + new Vector3(0.15f, 0f, target.forward.z * 0.5f);
+                    Vector3 localOffset = new Vector3(0f, -0.05f, 0.8f);
+
+                    Vector3 desiredPos = target.TransformPoint(localOffset);
+
                     _shirtCamera.transform.position =
                         Vector3.Lerp(_shirtCamera.transform.position, desiredPos, Time.deltaTime * 5f);
-                    Vector3 lookAt = new Vector3(target.position.x, _shirtCamera.transform.position.y,
-                        target.position.z);
-                    _shirtCamera.transform.LookAt(lookAt);
-                }
 
+                    _shirtCamera.transform.LookAt(target.position);
+                }
+                
                 if (shirtNameUI == null)
                 {
                     GameObject nameObj =
@@ -163,7 +153,7 @@ namespace ShirtsPad
             rend.material.mainTexture = rt;
             _shirtCamera.nearClipPlane = 0.01f;
         }
-
+        
         public AssetBundle InitialiseShirtPad(string path)
         {
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);

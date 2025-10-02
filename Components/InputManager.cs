@@ -1,90 +1,90 @@
 using System;
 using UnityEngine;
 
-namespace ShirtsPad.Components;
-
-public enum InputType
+namespace ShirtsPad.Components
 {
-    RightPrimary,
-    RightSecondary,
-    RightTrigger,
-    RightGrip,
-    LeftPrimary,
-    LeftSecondary,
-    LeftTrigger,
-    LeftGrip,
-}
-
-public class InputManager : MonoBehaviour
-{
-    public static InputManager Instance { get; private set; }
-
-    public struct ControllerButton
+    public enum InputType
     {
-        public bool isPressed;
-        public bool wasPressed;
-
-        public bool isReleased;
-        public bool wasReleased;
+        RightPrimary,
+        RightSecondary,
+        RightTrigger,
+        RightGrip,
+        LeftPrimary,
+        LeftSecondary,
+        LeftTrigger,
+        LeftGrip,
     }
 
-    public ControllerButton RightPrimary, RightSecondary, RightTrigger, RightGrip;
-    public ControllerButton LeftPrimary, LeftSecondary, LeftTrigger, LeftGrip;
-
-    public ControllerButton GetInput(InputType inputType)
+    public class InputManager : MonoBehaviour
     {
-        switch (inputType)
+        public static InputManager Instance { get; private set; }
+
+        public class ControllerButton
         {
-            case InputType.RightPrimary:
-                return RightPrimary;
-            case InputType.RightSecondary:
-                return RightSecondary;
-            case InputType.RightTrigger:
-                return RightTrigger;
-            case InputType.RightGrip:
-                return RightGrip;
-            case InputType.LeftPrimary:
-                return LeftPrimary;
-            case InputType.LeftSecondary:
-                return LeftSecondary;
-            case InputType.LeftTrigger:
-                return LeftTrigger;
-            case InputType.LeftGrip:
-                return LeftGrip;
-            default:
-                return default;
+            public bool Down;
+            public bool Held;
+            public bool Up;
+
+            private bool lastState;
+
+            public void Update(Func<bool> getInput)
+            {
+                bool current = getInput();
+
+                Down = !lastState && current;
+                Up = lastState && !current;
+                Held = current;
+
+                lastState = current;
+            }
         }
+
+        public ControllerButton RightPrimary = new();
+        public ControllerButton RightSecondary = new();
+        public ControllerButton RightTrigger = new();
+        public ControllerButton RightGrip = new();
+
+        public ControllerButton LeftPrimary = new();
+        public ControllerButton LeftSecondary = new();
+        public ControllerButton LeftTrigger = new();
+        public ControllerButton LeftGrip = new();
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+            Instance = this;
+        }
+
+        private void Update()
+        {
+            if (ControllerInputPoller.instance == null) return;
+
+            RightPrimary.Update(() => ControllerInputPoller.instance.rightControllerPrimaryButton);
+            RightSecondary.Update(() => ControllerInputPoller.instance.rightControllerSecondaryButton);
+            RightTrigger.Update(() => ControllerInputPoller.instance.rightControllerTriggerButton);
+            RightGrip.Update(() => ControllerInputPoller.instance.rightGrab);
+
+            LeftPrimary.Update(() => ControllerInputPoller.instance.leftControllerPrimaryButton);
+            LeftSecondary.Update(() => ControllerInputPoller.instance.leftControllerSecondaryButton);
+            LeftTrigger.Update(() => ControllerInputPoller.instance.leftControllerTriggerButton);
+            LeftGrip.Update(() => ControllerInputPoller.instance.leftGrab);
+        }
+
+        public ControllerButton GetInput(InputType type) => type switch
+        {
+            InputType.RightPrimary => RightPrimary,
+            InputType.RightSecondary => RightSecondary,
+            InputType.RightTrigger => RightTrigger,
+            InputType.RightGrip => RightGrip,
+            InputType.LeftPrimary => LeftPrimary,
+            InputType.LeftSecondary => LeftSecondary,
+            InputType.LeftTrigger => LeftTrigger,
+            InputType.LeftGrip => LeftGrip,
+            _ => null
+        };
     }
-
-    private void HandleInput(ref ControllerButton button, Func<bool> getInput)
-    {
-        bool isPressed = getInput();
-        bool wasPressed = button.isPressed;
-        button.isPressed = isPressed;
-        button.isReleased = !isPressed;
-
-        if (wasPressed && !isPressed)
-            button.wasReleased = true;
-        else
-            button.wasReleased = false;
-
-        if (!wasPressed && isPressed)
-            button.wasPressed = true;
-        else
-            button.wasPressed = false;
-    }
-
-    private void Update()
-    {
-        HandleInput(ref RightPrimary, () => ControllerInputPoller.instance.rightControllerPrimaryButton);
-        HandleInput(ref RightSecondary, () => ControllerInputPoller.instance.rightControllerSecondaryButton);
-        HandleInput(ref RightTrigger, () => ControllerInputPoller.instance.rightControllerTriggerButton);
-        HandleInput(ref RightGrip, () => ControllerInputPoller.instance.rightGrab);
-        HandleInput(ref LeftPrimary, () => ControllerInputPoller.instance.leftControllerPrimaryButton);
-        HandleInput(ref LeftSecondary, () => ControllerInputPoller.instance.leftControllerSecondaryButton);
-        HandleInput(ref LeftTrigger, () => ControllerInputPoller.instance.leftControllerTriggerButton);
-        HandleInput(ref LeftGrip, () => ControllerInputPoller.instance.leftGrab);
-    }
-
-    private void Awake() => Instance = this;
 }
