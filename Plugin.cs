@@ -174,6 +174,8 @@ namespace ShirtsPad
         private void PressButtonHelper(EButtonType buttonType)
         {
             ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(buttonType);
+            AudioSource audioDevice = GorillaTagger.Instance.offlineVRRig.rightHandPlayer;
+            audioDevice.GTPlayOneShot(ShirtManager.Instance.Audio[GorillaShirts.Models.EAudioType.ButtonPress], 0.35f);
         }
         
 
