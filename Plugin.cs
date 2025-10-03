@@ -33,6 +33,7 @@ namespace ShirtsPad
         private TextMeshProUGUI shirtNameUI;
         private TextMeshProUGUI shirtCreatorUI;
         private TextMeshProUGUI equipTextUI;
+        private GameObject shirtBackButton;
         
         public Camera _shirtCamera;
         public Transform target;
@@ -49,9 +50,6 @@ namespace ShirtsPad
             {
                 ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad")
                     .LoadAsset<GameObject>("ShirtsPad"));
-                //ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
-                //bad bad buttons no workie
-                
                 ShirtPad.transform.localScale = new Vector3(4.8f, 0.7f, 7f);
                 ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
@@ -130,6 +128,13 @@ namespace ShirtsPad
                     _shirtCamera.transform.LookAt(target.position);
                 }
                 
+                if (shirtBackButton == null)
+                {
+                    GameObject backObj =
+                        GameObject.Find("GorillaShirts/Shirt Stand/UI/MainMenu/MainContainer/Text/Navigation/");
+                    if (backObj != null) shirtBackButton = backObj;
+                }
+                
                 if (shirtNameUI == null)
                 {
                     GameObject nameObj =
@@ -151,6 +156,15 @@ namespace ShirtsPad
                     if (equipObj != null) equipTextUI = equipObj.GetComponent<TextMeshProUGUI>();
                 }
 
+                if (shirtBackButton != null)
+                {
+                    back.SetActive(shirtBackButton.activeSelf);
+                    if (shirtBackButton.activeSelf)
+                        shirtsView.transform.localPosition = new Vector3(-0.00122f, -0.0141f, 0.00518f);
+                    else
+                        shirtsView.transform.localPosition = new Vector3(0f, -0.0141f, 0.00518f);
+
+                }
                 if (shirtNameUI != null) shirtName.text = shirtNameUI.text;
                 if (shirtCreatorUI != null) shirtCreator.text = shirtCreatorUI.text;
                 if (equipTextUI != null) equipText.text = equipTextUI.text;
