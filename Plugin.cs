@@ -50,6 +50,8 @@ namespace ShirtsPad
                 ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad")
                     .LoadAsset<GameObject>("ShirtsPad"));
                 //ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
+                //bad bad buttons no workie
+                
                 ShirtPad.transform.localScale = new Vector3(4.8f, 0.7f, 7f);
                 ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
