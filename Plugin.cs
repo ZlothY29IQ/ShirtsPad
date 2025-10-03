@@ -38,13 +38,8 @@ namespace ShirtsPad
         public Transform target;
 
 
-        public static Plugin Instance { get; private set; }
 
-        private void Awake()
-        {
-            Instance = this;
-            Logger.LogInfo(Constants.Description);
-        }
+        private void Awake() => Logger.LogInfo(Constants.Description);
 
         private void Start() => GorillaTagger.OnPlayerSpawned(OnPlayerSpawned);
 
