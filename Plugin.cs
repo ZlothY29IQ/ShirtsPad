@@ -1,11 +1,16 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BepInEx;
 using GorillaLocomotion;
 using ShirtsPad.Components;
 using UnityEngine;
 using TMPro;
 using GorillaShirts;
+using GorillaShirts.Behaviours;
 using GorillaShirts.Behaviours.Cosmetic;
+using GorillaShirts.Behaviours.UI;
+using GorillaShirts.Models.StateMachine;
+using GorillaShirts.Models.UI;
 using HarmonyLib;
 
 namespace ShirtsPad
@@ -49,9 +54,8 @@ namespace ShirtsPad
             {
                 ShirtPad = Instantiate(InitialiseShirtPad("ShirtsPad.Assets.shirtpad")
                     .LoadAsset<GameObject>("ShirtsPad"));
-                ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
+                //ShirtPad.transform.SetParent(GTPlayer.Instance.leftControllerTransform, false);
                 ShirtPad.transform.localScale = new Vector3(4.8f, 0.7f, 7f);
-                //ShirtPad.transform.localScale = new Vector3(4.61f, 0.7f, 6.88f);
                 ShirtPad.transform.localRotation = Quaternion.Euler(325f, 10f, 85f);
                 ShirtPad.transform.localPosition = new Vector3(0.015f, -0.05f, -0.025f);
                 ShirtPad.SetActive(false);
@@ -75,14 +79,28 @@ namespace ShirtsPad
             versionText.text = $"Version: {Constants.Version}";
             
 
-            back.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Back Button Pressed"); };
-            previous.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Previous Button Pressed"); };
-            next.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Next Button Pressed"); };
-            equip.AddComponent<GorillaButton>().onPressed = () => { Logger.LogInfo("Equip Button Pressed"); };
+            back.AddComponent<PressableButton>().OnPress = () => { PressButtonHelper(EButtonType.Return); };
+            previous.AddComponent<PressableButton>().OnPress = () => { PressButtonHelper(EButtonType.NavigateDecrease); };
+            next.AddComponent<PressableButton>().OnPress = () => { PressButtonHelper(EButtonType.NavigateIncrease); };
+            equip.AddComponent<PressableButton>().OnPress = () => { PressButtonHelper(EButtonType.NavigateSelect); };
 
             
             GameObject componentHolder = new GameObject("ComponentHolder");
             componentHolder.AddComponent<InputManager>();
+        }
+
+        private void LateUpdate()
+        {
+            if (ShirtPad.activeSelf)
+            {
+                if (GTPlayer.Instance.leftControllerTransform != null)
+                {
+                    ShirtPad.transform.position =
+                        GTPlayer.Instance.leftControllerTransform.TransformPoint(0.015f, -0.05f, -0.025f);
+                    ShirtPad.transform.rotation = GTPlayer.Instance.leftControllerTransform.rotation *
+                                                  Quaternion.Euler(325f, 10f, 85f);
+                }
+            }
         }
 
         private void Update()
@@ -102,6 +120,7 @@ namespace ShirtsPad
 
             if (ShirtPad.activeSelf)
             {
+                
                 if (_shirtCamera != null && target != null)
                 {
                     Vector3 localOffset = new Vector3(0f, 0f, 0.8f);
@@ -141,6 +160,11 @@ namespace ShirtsPad
             }
         }
 
+        private void PressButtonHelper(EButtonType buttonType)
+        {
+            ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(buttonType);
+        }
+        
 
         public void CreateShirtCam(Transform targetObject)
         {
