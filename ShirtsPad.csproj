@@ -28,7 +28,7 @@
             <HintPath>$(GameAssemblyPath)\Cinemachine.dll</HintPath>
         </Reference>
         <Reference Include="GorillaShirts" Publicize="True">
-          <HintPath>$(PluginsPath)\#Dev's Mods\GorillaShirts\GorillaShirts.dll</HintPath>
+            <HintPath>$(PluginsPath)\GorillaShirts\GorillaShirts.dll</HintPath>
         </Reference>
         <Reference Include="Mono.Security">
             <HintPath>$(GameAssemblyPath)\Mono.Security.dll</HintPath>
@@ -85,7 +85,7 @@
             <HintPath>$(GameAssemblyPath)\Unity.Mathematics.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\Gorilla Tag_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <HintPath>$(GameAssemblyPath)\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="Unity.Timeline">
             <HintPath>$(GameAssemblyPath)\Unity.Timeline.dll</HintPath>
@@ -291,14 +291,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Assets\shirtpad" />
-      <EmbeddedResource Include="Assets\shirtpad" />
+        <None Remove="Assets\shirtpad"/>
+        <EmbeddedResource Include="Assets\shirtpad"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.5.0-beta.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.5.0-beta.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>

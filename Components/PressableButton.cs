@@ -1,14 +1,15 @@
-using System;
+using GorillaShirts.Behaviours;
+using GorillaShirts.Models;
+using GorillaShirts.Models.UI;
 using UnityEngine;
 
 namespace ShirtsPad.Components;
 
 public class PressableButton : MonoBehaviour
 {
-    public Action OnPress;
-
-    private const float DebounceTime = 0.2f;
-    private float touchTime;
+    private const float       DebounceTime = 0.2f;
+    public        EButtonType ButtonType;
+    private       float       touchTime;
 
     private void Awake() => gameObject.SetLayer(UnityLayer.GorillaInteractable);
 
@@ -17,11 +18,13 @@ public class PressableButton : MonoBehaviour
         if (Time.time - touchTime < DebounceTime)
             return;
 
-        var hand = other.GetComponentInParent<GorillaTriggerColliderHandIndicator>();
+        GorillaTriggerColliderHandIndicator hand = other.GetComponentInParent<GorillaTriggerColliderHandIndicator>();
         if (hand != null && !hand.isLeftHand)
         {
             touchTime = Time.time;
-            OnPress?.Invoke();
+
+            ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(ButtonType);
+            GorillaTagger.Instance.offlineVRRig.rightHandPlayer.GTPlayOneShot(ShirtManager.Instance.Audio[EAudioType.ButtonPress], 0.35f);
             GorillaTagger.Instance.StartVibration(hand.isLeftHand, 0.2f, 0.2f);
         }
     }
