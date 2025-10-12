@@ -2,10 +2,10 @@
 using System.IO;
 using System.Reflection;
 using BepInEx;
+using GorillaShirts.Behaviours;
+using GorillaShirts.Models.StateMachine;
 using ShirtsPad.Core;
 using UnityEngine;
-using GorillaShirts.Behaviours;
-
 
 namespace ShirtsPad;
 
@@ -14,7 +14,11 @@ namespace ShirtsPad;
 public class Plugin : BaseUnityPlugin
 {
     private GameObject shirtPad;
-    private void Awake() => Logger.LogInfo(Constants.Description); // zlothy no likey me remove this, in his own words "nooooo i need my description"
+
+    private void Awake() =>
+            Logger.LogInfo(Constants
+                   .Description); // zlothy no likey me remove this, in his own words "nooooo i need my description"
+
     private void Start() => GorillaTagger.OnPlayerSpawned(OnPlayerSpawned);
 
     private void OnPlayerSpawned()
@@ -23,22 +27,25 @@ public class Plugin : BaseUnityPlugin
         AssetBundle bundle = AssetBundle.LoadFromStream(bundleStream);
         // ReSharper disable once PossibleNullReferenceException
         bundleStream.Close();
-        
-        shirtPad = Instantiate(bundle.LoadAsset<GameObject>("ShirtsPad"));
+
+        shirtPad                      = Instantiate(bundle.LoadAsset<GameObject>("ShirtsPad"));
         shirtPad.transform.localScale = new Vector3(4.8f, 0.7f, 7f);
         shirtPad.SetActive(false);
-        
+
         gameObject.AddComponent<InputHandler>();
         InputHandler.ShirtPad = shirtPad;
 
         StartCoroutine(WaitForShirtsToLoad());
     }
-    
+
     private IEnumerator WaitForShirtsToLoad()
     {
-        while (ShirtManager.Instance == null || ShirtManager.Instance.MenuStateMachine == null || ShirtManager.Instance.MenuStateMachine.CurrentState is GorillaShirts.Models.StateMachine.Menu_Loading)
+        while (ShirtManager.Instance == null || ShirtManager.Instance.MenuStateMachine == null ||
+               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Welcome ||
+               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Info ||
+               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Loading)
             yield return null;
-        
+
         gameObject.AddComponent<PadHandler>();
         PadHandler.ShirtPad = shirtPad;
     }
