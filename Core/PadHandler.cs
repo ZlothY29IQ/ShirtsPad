@@ -63,7 +63,7 @@ public class PadHandler : MonoBehaviour
         if (standBack != null && back.activeSelf != standBack.activeSelf)
         {
             back.SetActive(standBack.activeSelf);
-            shirtsView.transform.localPosition = standBack.activeSelf ? shirtsViewBackEnabled : shirtsViewBackDisabled;
+            shirtsView.localPosition = standBack.activeSelf ? shirtsViewBackEnabled : shirtsViewBackDisabled;
         }
 
         if (standShirtName != null && shirtName.text != standShirtName.text) shirtName.text = standShirtName.text;
