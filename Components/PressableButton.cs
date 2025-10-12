@@ -19,13 +19,14 @@ public class PressableButton : MonoBehaviour
             return;
 
         GorillaTriggerColliderHandIndicator hand = other.GetComponentInParent<GorillaTriggerColliderHandIndicator>();
-        if (hand != null && !hand.isLeftHand)
-        {
-            touchTime = Time.time;
 
-            ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(ButtonType);
-            GorillaTagger.Instance.offlineVRRig.rightHandPlayer.GTPlayOneShot(ShirtManager.Instance.Audio[EAudioType.ButtonPress], 0.35f);
-            GorillaTagger.Instance.StartVibration(hand.isLeftHand, 0.2f, 0.2f);
-        }
+        if (hand == null || hand.isLeftHand)
+            return;
+
+        touchTime = Time.time;
+
+        ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(ButtonType);
+        GorillaTagger.Instance.offlineVRRig.rightHandPlayer.GTPlayOneShot(ShirtManager.Instance.Audio[EAudioType.ButtonPress], 0.35f);
+        GorillaTagger.Instance.StartVibration(false, 0.2f, 0.2f);
     }
 }

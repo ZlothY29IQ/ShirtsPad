@@ -36,10 +36,7 @@ public class Plugin : BaseUnityPlugin
     
     private IEnumerator WaitForShirtsToLoad()
     {
-        while (!ShirtManager.HasInstance)
-            yield return null;
-        
-        while (ShirtManager.Instance.MenuStateMachine.CurrentState is GorillaShirts.Models.StateMachine.Menu_Loading)
+        while (!ShirtManager.HasInstance || ShirtManager.Instance.MenuStateMachine.CurrentState is GorillaShirts.Models.StateMachine.Menu_Loading)
             yield return null;
         
         gameObject.AddComponent<PadHandler>();
