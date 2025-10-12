@@ -9,14 +9,14 @@ public class PadHandler : MonoBehaviour
 {
     public static    GameObject ShirtPad;
     private readonly Vector3    shirtsViewBackDisabled = new(0f, -0.0141f, 0.00518f);
-
     private readonly Vector3 shirtsViewBackEnabled = new(-0.00122f, -0.0141f, 0.00518f);
 
+    private Transform  shirtsView;
+    
     private GameObject  back;
     private TextMeshPro equipText;
     private TextMeshPro shirtCreator;
     private TextMeshPro shirtName;
-    private GameObject  shirtsView;
 
     private GameObject      standBack;
     private TextMeshProUGUI standEquipText;
@@ -36,7 +36,8 @@ public class PadHandler : MonoBehaviour
         ShirtPad.transform.Find("Equip").AddComponent<PressableButton>().ButtonType = EButtonType.NavigateSelect;
         ShirtPad.transform.Find("Credits/Version").GetComponent<TextMeshPro>().text = $"Version: {Constants.Version}";
 
-        ShirtPad.transform.Find("ShirtsView").AddComponent<StandCameraHandler>();
+        shirtsView = ShirtPad.transform.Find("ShirtsView");
+        shirtsView.AddComponent<StandCameraHandler>();
     }
 
     private void Update()
