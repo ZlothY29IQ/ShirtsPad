@@ -4,7 +4,7 @@ namespace ShirtsPad.Core;
 
 public class StandCameraHandler : MonoBehaviour
 {
-    private readonly Vector3 standCameraOffset = new(0f, 0f, 0.8f);
+    private readonly Vector3 standCameraOffset = new(0f, -0.08f, 0.8f);
 
     private Camera    standCamera;
     private Transform target;
@@ -24,7 +24,7 @@ public class StandCameraHandler : MonoBehaviour
             standCamera.transform.position = Vector3.Lerp(standCamera.transform.position,
                     target.TransformPoint(standCameraOffset), Time.deltaTime * 5f);
 
-            standCamera.transform.LookAt(target.position);
+            standCamera.transform.LookAt(new Vector3(target.position.x, standCamera.transform.position.y, target.position.z));
         }
     }
 
