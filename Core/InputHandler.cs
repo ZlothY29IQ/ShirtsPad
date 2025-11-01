@@ -23,8 +23,8 @@ public class InputHandler : MonoBehaviour
     {
         if (!ShirtPad.activeSelf) return;
 
-        ShirtPad.transform.position = GTPlayer.Instance.leftControllerTransform.TransformPoint(0.015f, -0.05f, -0.025f);
+        ShirtPad.transform.position = GTPlayer.Instance.LeftHand.controllerTransform.TransformPoint(0.015f, -0.05f, -0.025f);
         ShirtPad.transform.rotation =
-                GTPlayer.Instance.leftControllerTransform.rotation * Quaternion.Euler(325f, 10f, 85f);
+                GTPlayer.Instance.LeftHand.controllerTransform.rotation * Quaternion.Euler(325f, 10f, 85f);
     }
 }

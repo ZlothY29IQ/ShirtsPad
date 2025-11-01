@@ -40,10 +40,8 @@ public class Plugin : BaseUnityPlugin
 
     private IEnumerator WaitForShirtsToLoad()
     {
-        while (ShirtManager.Instance == null || ShirtManager.Instance.MenuStateMachine == null ||
-               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Welcome ||
-               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Info ||
-               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Loading)
+        while (ShirtManager.Instance == null || ShirtManager.Instance.MenuStateMachine is null ||
+               ShirtManager.Instance.MenuStateMachine.CurrentState is Menu_Welcome or Menu_Loading or Menu_Info)
             yield return null;
 
         gameObject.AddComponent<PadHandler>();
