@@ -27,7 +27,7 @@ public class PressableButton : MonoBehaviour
 
         ShirtManager.Instance.MenuStateMachine.CurrentState.OnButtonPress(ButtonType);
         GorillaTagger.Instance.offlineVRRig.rightHandPlayer.GTPlayOneShot(
-                ShirtManager.Instance.Audio[EAudioType.ButtonPress], 0.35f);
+                ShirtManager.Instance.Audio[SoundType.ButtonPress], 0.35f);
 
         GorillaTagger.Instance.StartVibration(false, 0.2f, 0.2f);
     }

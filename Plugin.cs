@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ShirtsPad;
 
-[BepInDependency("dev.gorillashirts")]
+[BepInDependency("dev.gorillashirts", "2.4.1")]
 [BepInPlugin(Constants.GUID, Constants.Name, Constants.Version)]
 public class Plugin : BaseUnityPlugin
 {
@@ -17,7 +17,7 @@ public class Plugin : BaseUnityPlugin
 
     private void Awake() =>
             Logger.LogInfo(Constants
-                   .Description); // zlothy no likey me remove this, in his own words "nooooo i need my description"
+                   .Description);
 
     private void Start() => GorillaTagger.OnPlayerSpawned(OnPlayerSpawned);
 

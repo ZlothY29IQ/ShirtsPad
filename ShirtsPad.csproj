@@ -28,7 +28,7 @@
             <HintPath>$(GameAssemblyPath)\Cinemachine.dll</HintPath>
         </Reference>
         <Reference Include="GorillaShirts" Publicize="True">
-            <HintPath>$(PluginsPath)\GorillaShirts\GorillaShirts.dll</HintPath>
+            <HintPath>$(PluginsPath)\#Dev's Mods\GorillaShirts\GorillaShirts.dll</HintPath>
         </Reference>
         <Reference Include="Mono.Security">
             <HintPath>$(GameAssemblyPath)\Mono.Security.dll</HintPath>

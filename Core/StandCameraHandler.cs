@@ -6,7 +6,7 @@ public class StandCameraHandler : MonoBehaviour
 {
     private readonly Vector3 standCameraOffset = new(0f, -0.08f, 0.8f);
 
-    private Camera    standCamera;
+    private Camera    standCamera; 
     private Transform target;
 
     private void Update()

@@ -8,7 +8,7 @@ public class InputHandler : MonoBehaviour
     public static GameObject ShirtPad;
 
     private bool
-            wasLeftControllerPrimaryButtonPressed; // i know the name is long but i blame it on controller input pollers horribly long names
+            wasLeftControllerPrimaryButtonPressed;
 
     private void Update()
     {
